@@ -13,7 +13,7 @@ PlanEase is a **desktop app tailored for event planners to organise and manage t
 
 1. Ensure you have Java `11` or above installed in your Computer.
 
-2. Download the latest `planease.jar`(Coming soon!).
+2. Download the latest [planease.jar](https://github.com/AY2223S2-CS2103-W16-3/tp/releases/tag/v1.3).
 
 3. Copy the file to the folder you want to use as the _home folder_ for your PlanEase application.
 
@@ -25,20 +25,20 @@ PlanEase is a **desktop app tailored for event planners to organise and manage t
    Some example commands you can try:
 
    * `list` : Lists all contacts.
-   
+
    * `listevent` : Lists all events.
-   
+
    * `listall` : Lists all contacts and events using a single command.
 
    * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
-   
+
    * `addevent ev/CEO's 50th Birthday Carnival from/17-07-2023 12:00 to/23-07-2023 22:00` : Adds an event named `CEO's 50th Birthday Carnival` to the Address Book.
 
    * `delete 3` : Deletes the 3rd contact shown in the current contact list.
-   
+
    * `delevent 1` : Deletes the 1st event shown in the current event list.
 
-   * `clear` : Deletes all contacts.
+   * `clear` : Deletes all contacts and events.
 
    * `exit` : Exits the app.
 
@@ -70,7 +70,7 @@ PlanEase is a **desktop app tailored for event planners to organise and manage t
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
 
-* `DATEIME` must be in this format: `DD-MM-YYYY HH:mm`.
+* All `DATETIME` must strictly be in this format: `DD-MM-YYYY HH:mm`.
 
 </div>
 
@@ -86,13 +86,13 @@ Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [evt/EVENT_INDEX]…​`
 * The event index refers to the index number shown in the displayed event list.
 * The event index **must be a positive integer** 1, 2, 3, …​
 
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+<div markdown="span" class="alert alert-primary">:bulb: **Note:**
 A person can have any number of events (including 0)
 </div>
 
 Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` Adds person to the address book.
-* `add n/Alex Yeoh p/89028392 e/alex@email.com a/Blk 142 Apple Street 23 evt/1` Adds 1st event to the new person `Alex Yeoh` in the address book.
+* `add n/Pearlyn Yeah p/89027382 e/pearlyn@email.com a/Blk 124 Orange Street 25 evt/1` Adds 1st event to the new person `Pearlyn Yeah` in the address book.
 
 #### Listing all persons : `list`
 
@@ -162,6 +162,10 @@ Format: `addevent ev/EVENT_NAME from/DATETIME to/DATETIME`
 * Event name cannot exceed 50 characters.
 * Start date time cannot be after the end date time.
 
+<div markdown="span" class="alert alert-primary">:bulb: **Note:**
+Past events can be added for tracking purposes.
+</div>
+
 Examples:
 * `addevent ev/Wedding Dinner from/01-05-2023 17:00 to/01-05-2023 21:00`
 * `addevent ev/Dinner from/01-05-2023 17:30 to/01-05-2023 19:30`
@@ -199,8 +203,8 @@ Format: `sortevent SORT_TYPE`
 
 * Sorts all the events in the current event list based on the specified `SORT_TYPE`.
 * `SORT_TYPE` must be one of these values:
-  * `a`: Sorts based on event names in ascending order.
-  * `b`: Sorts based on event names in descending order.
+  * `a`: Sorts based on event names in ascending ASCII order.
+  * `b`: Sorts based on event names in descending ASCII order.
   * `c`: Sorts based on start date times in ascending order.
   * `d`: Sorts based on end date times in ascending order.
 * There must be at least 2 events in the current event list to sort the event list.
@@ -223,6 +227,23 @@ Format: `editevent EVENT_INDEX [ev/EVENT_NAME] [from/DATETIME] [to/DATETIME]`
 Examples:
 *  `editevent 1 ev/Birthday Party from/17-07-2023 12:00` Edits the event name and start datetime of the 1st event to be `Birthday Party` and `17-07-2023 12:00` respectively.
 
+#### Finding events by name: `findevent`
+
+Finds events whose names contain any of the given keywords.
+
+Format: `findevent KEYWORD [MORE_KEYWORDS]`
+
+* The search is case-insensitive. e.g `party` will match `Party`
+* The order of the keywords does not matter. e.g. `Birthday Party` will match `Party Birthday`
+* Only the event name is searched.
+* Only full words will be matched e.g. `Concert` will not match `Concerts`
+* Events matching at least one keyword will be returned (i.e. `OR` search).
+  e.g. `Wedding Dinner` will return `Wedding Ceremony`, `Birthday Dinner`
+
+Examples:
+* `findevent Dinner` returns `Wedding Dinner` and `Dinner and Dance`
+* `findevent birthday party` returns `Birthday Lunch`, `Graduation Party`
+
 #### Deleting an event : `delevent`
 
 Deletes the specified event from the event list and deletes all occurrences of the event tied to persons in the address book, if any.
@@ -237,6 +258,12 @@ Examples:
 * `listevent` followed by `delevent 2` deletes the 2nd event in the event list and all occurrences of the 2nd event tied to persons in the address book, if any.
 
 ### Other Features
+
+#### Listing all persons and events : `listall`
+
+Prints all the existing persons and events in the address book.
+
+Format: `listall`
 
 #### Viewing help : `help`
 
@@ -266,12 +293,6 @@ AddressBook data are saved in the hard disk automatically after any command that
 
 AddressBook data are saved as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
 
-<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run.
-</div>
-
-_Details coming soon ..._
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## FAQ
@@ -285,13 +306,16 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add Contact** | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [ev/EVENT_INDEX] …​` <br> e.g., `add n/Alex Yeoh p/89028392 e/alex@email.com a/Blk 142 Apple Street 23 evt/1`
+**Add Contact** | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [ev/EVENT_INDEX] …​` <br> e.g., `add n/Pearlyn Yeah p/89027382 e/pearlyn@email.com a/Blk 124 Orange Street 25 evt/1`
 **Add Event** | `addevent ev/EVENT_NAME from/DATETIME to/DATETIME` <br> e.g., `addevent ev/Wedding Dinner from/01-05-2023 17:00 to/01-05-2023 21:00`
 **Clear** | `clear`
 **Delete Contact** | `delete INDEX`<br> e.g., `delete 3`
 **Delete Event** | `delevent EVENT_INDEX` <br> e.g., `delevent 2`
 **Edit Contact** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [evt/EVENT_INDEX]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Edit Event** | `editevent EVENT_INDEX [ev/EVENT_NAME] [from/DATETIME] [to/DATETIME]​`<br> e.g.,`editevent 1 ev/Birthday Party from/17-07-2023 12:00`
+**Find Contact** |  `find KEYWORD [MORE_KEYWORDS]`
+**Find Event** | `findevent KEYWORD [MORE_KEYWORDS]`
+**List All Contacts and Events** | `listall`
 **List Contact** | `list`
 **List Event** | `listevent`
 **List Contact From event** | `listevcontact`
